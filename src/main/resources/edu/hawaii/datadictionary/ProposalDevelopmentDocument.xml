@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans         http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<!-- UH Changes:
+			KC-201: Override businessRulesClass so we can make Project Summary Abstract required
+			KC-263 - Hide or Remove Disapprove button on Proposal Actions tab
+	 -->
+	<bean id="ProposalDevelopmentDocument" parent="ProposalDevelopmentDocument-parentBean">
+		<!-- KC-201: Override businessRulesClass so we can make Project Summary Abstract required -->
+		<property name="businessRulesClass" value="edu.hawaii.proposaldevelopment.rules.UhProposalDevelopmentDocumentRule" />
+		<!-- KC-263 - Hide or Remove Disapprove button on Proposal Actions tab -->
+		<property name="documentAuthorizerClass" value="edu.hawaii.proposaldevelopment.document.authorization.UhProposalDevelopmentDocumentAuthorizer"/>
+	</bean>
+	
+	
+	<bean id="ProposalDevelopmentDocument-workflowProperties" parent="ProposalDevelopmentDocument-workflowProperties-parentBean">
+	<property name="workflowPropertyGroups">
+      <list merge="true">
+        <bean parent="WorkflowPropertyGroup">
+          <property name="workflowProperties">
+            <list merge="true">
+              <bean parent="WorkflowProperty" p:path="developmentProposalList.proposalPersons"/>
+              <bean parent="WorkflowProperty" p:path="developmentProposalList.proposalPersons.units"/>
+              <!-- KC-632 OTTED routing not working -->
+              <bean parent="WorkflowProperty" p:path="customDataList"/>
+			 </list>
+          </property>
+        </bean>
+      </list>
+    </property>
+	</bean>
+	
+</beans>
